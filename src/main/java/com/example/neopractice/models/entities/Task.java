@@ -1,9 +1,13 @@
 package com.example.neopractice.models.entities;
 
+import com.example.neopractice.models.entities.enums.PriorityEnum;
+import com.example.neopractice.models.entities.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
@@ -45,7 +49,9 @@ public class Task {
     @JoinColumn(name = "author_id")
     private User author;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 }

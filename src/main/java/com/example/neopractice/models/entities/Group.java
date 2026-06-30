@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
@@ -28,5 +29,6 @@ public class Group {
     @JoinColumn(name = "owner_id")
     private User owner;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
 }
