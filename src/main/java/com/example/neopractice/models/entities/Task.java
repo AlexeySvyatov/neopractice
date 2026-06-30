@@ -50,6 +50,7 @@ public class Task {
     private User author;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
