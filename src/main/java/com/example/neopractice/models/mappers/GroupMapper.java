@@ -28,7 +28,7 @@ public class GroupMapper {
         return groups.stream().map(this::toGroupResponse).toList();
     }
 
-    public Group toGroup(GroupRequest request, User owner) {
+    public Group toGroupEntity(GroupRequest request, User owner) {
         return Group.builder()
                 .name(request.getName())
                 .description(request.getDescription())
@@ -36,7 +36,7 @@ public class GroupMapper {
                 .build();
     }
 
-    public void updateGroup(Group group, GroupRequest request) {
+    public void updateGroupEntity(Group group, GroupRequest request) {
         group.setName(request.getName());
         group.setDescription(request.getDescription());
     }
