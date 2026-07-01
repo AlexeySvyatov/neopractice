@@ -42,30 +42,30 @@ public class GroupService {
     }
 
     @Transactional
-    public GroupResponse updateGroup(UUID id, GroupRequest request, String username) {
+    public GroupResponse updateGroup(UUID groupId, GroupRequest request, String username) {
         User user = checkUser(username);
-        Group group = checkGroup(id);
-        checkPermissions(id, user);
+        Group group = checkGroup(groupId);
+        checkPermissions(groupId, user);
         groupMapper.updateGroupEntity(group, request);
         Group updatedGroup = groupRepository.save(group);
         return groupMapper.toGroupResponse(updatedGroup);
     }
 
     @Transactional
-    public void deleteGroup(UUID id, String username) {
+    public void deleteGroup(UUID groupId, String username) {
         User user = checkUser(username);
-        Group group = checkGroup(id);
-        checkPermissions(id, user);
-        List<GroupMembers> members = groupRepository.findAllMembersByGroup(id);
+        Group group = checkGroup(groupId);
+        checkPermissions(groupId, user);
+        List<GroupMembers> members = groupRepository.findAllMembersByGroup(groupId);
         groupMembersRepository.deleteAll(members);
         groupRepository.delete(group);
     }
 
     @Transactional
-    public GroupResponse getGroup(UUID id, String username) {
+    public GroupResponse getGroup(UUID groupId, String username) {
         User user = checkUser(username);
-        Group group = checkGroup(id);
-        checkPermissions(id, user);
+        Group group = checkGroup(groupId);
+        checkPermissions(groupId, user);
         return groupMapper.toGroupResponse(group);
     }
 
@@ -77,22 +77,22 @@ public class GroupService {
     }
 
     @Transactional
-    public List<GroupMembersResponse> getGroupMembers(UUID id, String username) {
+    public List<GroupMembersResponse> getGroupMembers(UUID groupId, String username) {
         User user = checkUser(username);
-        Group group = checkGroup(id);
-        checkPermissions(id, user);
-        List<GroupMembers> members = groupRepository.findAllMembersByGroup(id);
+        Group group = checkGroup(groupId);
+        checkPermissions(groupId, user);
+        List<GroupMembers> members = groupRepository.findAllMembersByGroup(groupId);
         return groupMembersMapper.toResponseList(members);
     }
 
     @Transactional
-    public GroupMembersResponse addGroupMember(UUID id, String username, AddMemberRequest request) {
+    public GroupMembersResponse addGroupMember(UUID groupId, String username, AddMemberRequest request) {
         User user = checkUser(username);
-        Group group = checkGroup(id);
-        checkPermissions(id, user);
+        Group group = checkGroup(groupId);
+        checkPermissions(groupId, user);
         User newMember = userRepository.findById(request.getId())
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
-        if (groupRepository.isUserMemberOfGroup(id, newMember.getId())) {
+        if (groupRepository.isUserMemberOfGroup(groupId, newMember.getId())) {
             throw new DuplicateResourceException("Пользователь уже состоит в данной группе");
         }
         GroupMembers member = groupMembersMapper.toEntity(group, newMember, RoleEnum.MEMBER);
@@ -101,16 +101,16 @@ public class GroupService {
     }
 
     @Transactional
-    public void removeGroupMember(UUID id, String username, UUID userId) {
+    public void removeGroupMember(UUID groupId, String username, UUID userId) {
         User user = checkUser(username);
-        Group group = checkGroup(id);
-        checkPermissions(id, user);
+        Group group = checkGroup(groupId);
+        checkPermissions(groupId, user);
         User removedMember = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
         if (group.getOwner().getId().equals(userId)) {
             throw new PermissionDeniedException("Нельзя удалить владельца группы");
         }
-        GroupMembersId memberId = new GroupMembersId(id, userId);
+        GroupMembersId memberId = new GroupMembersId(groupId, userId);
         GroupMembers member = groupMembersRepository.findById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден"));
         groupMembersRepository.delete(member);
