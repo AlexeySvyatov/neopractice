@@ -28,7 +28,7 @@ public class UserService {
 
     public String register(RegisterRequest request) {
         validate(request);
-        User user = authMapper.toUser(request);
+        User user = authMapper.toUserEntity(request);
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
         return jwtUtil.generateToken(user.getUsername());

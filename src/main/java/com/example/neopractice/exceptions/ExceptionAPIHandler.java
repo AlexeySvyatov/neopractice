@@ -26,7 +26,7 @@ public class ExceptionAPIHandler {
     }
 
     // 404 - NOT FOUND
-    @ExceptionHandler({ResourceNotFoundException.class, UserNotFoundException.class, GroupNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class, UserNotFoundException.class, GroupNotFoundException.class, TaskNotFoundException.class})
     public ResponseEntity<ErrorResponse> handleNotFoundException(RuntimeException e, HttpServletRequest request) {
         return buildErrorResponse(e, HttpStatus.NOT_FOUND, request);
     }
@@ -47,6 +47,12 @@ public class ExceptionAPIHandler {
                 .findFirst()
                 .orElse("Validation error");
         return buildErrorResponse(new RuntimeException(message), HttpStatus.BAD_REQUEST, request);
+    }
+
+    // 400 - Ошибка перечисления (некорректное написание)
+    @ExceptionHandler(InvalidEnumValueException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidEnumValueException(InvalidEnumValueException e, HttpServletRequest request) {
+        return buildErrorResponse(e, HttpStatus.BAD_REQUEST, request);
     }
 
     // 401 - Ошибка аутентификации (невалидный токен)
