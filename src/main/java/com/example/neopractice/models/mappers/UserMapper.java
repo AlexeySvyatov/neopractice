@@ -1,19 +1,23 @@
 package com.example.neopractice.models.mappers;
 
-import com.example.neopractice.models.dtos.UserResponse;
+import com.example.neopractice.models.dtos.responses.UserResponse;
 import com.example.neopractice.models.entities.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
     public UserResponse toUserResponse(User user) {
-        return new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getCreatedAt());
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .createdAt(user.getCreatedAt())
+                .build();
     }
 
     public List<UserResponse> toUserResponseList(List<User> users) {
-        return users.stream().map(this::toUserResponse).collect(Collectors.toList());
+        return users.stream().map(this::toUserResponse).toList();
     }
 }

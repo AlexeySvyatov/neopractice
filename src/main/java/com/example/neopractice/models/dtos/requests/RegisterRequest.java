@@ -1,18 +1,26 @@
-package com.example.neopractice.models.dtos;
+package com.example.neopractice.models.dtos.requests;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record RegisterRequest(
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RegisterRequest {
         @NotBlank(message = "Имя пользователя обязательно")
         @Size(max = 25)
-        String username,
+        private String username;
         @NotBlank(message = "Почта обязательна")
         @Email(message = "Неверный формат почты")
         @Size(max = 50)
-        String email,
+        private String email;
         @NotBlank(message = "Пароль обязателен")
         @Size(min = 6, max = 20, message = "Пароль от 6 до 20 символов")
-        String password) {
+        private String password;
 }

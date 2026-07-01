@@ -29,5 +29,6 @@ public class User {
     private String passwordHash;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 }
