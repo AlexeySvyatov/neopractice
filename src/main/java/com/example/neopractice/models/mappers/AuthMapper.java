@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthMapper {
-    public User toUser(RegisterRequest request) {
+    public User toUserEntity(RegisterRequest request) {
         return User.builder().
                 username(request.getUsername()).
                 email(request.getEmail()).
